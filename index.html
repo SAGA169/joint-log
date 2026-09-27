@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>指関節の痛み記録</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="指関節記録">
+<meta name="theme-color" content="#F2F4F8">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAECUlEQVR42u3coY7UUBiG4e6EG0BxC4DCIBBYQkKCxKIRXA0CjUWSkBAsJAgMChDcAAqJI9imO+3MdM+ZdP/vee1mOwn7nL8dck4v/v76PEj72vknEByCQ3AIDsEhOASH4BAcgkOCQ3AIDsEhOASH4BAcgkNwSHAIDsEhOHTObvgnePfz39yPnt6OXjwXscchF0xQkovjJBbJRLJwrGaRSSQIx5yMZ08ezv3K2/efkn2k4NgrY4HFQSIJPiJwXJZxJItlIuV91McxkbGCxQKR2j52ZJzU5ApNnnDhqCAjzUfKt7JWMnpcDY6tfHG97p8Fx6bHRs7wqInj/Eu55PCoPzn6LfHyw8N+DiXhGE/43ot7fP16dxaTQ3AIDsEhOASH4BAcgmOzjXdnze0QbtX4+vV2hZkcCsbRb3j0HktwdL+zVP1EOLa7xMuPjco4zrmUqx5QSHkgbbvQE8ZGcRyTBd3qL5pzrqn45GjuI+rEm7Oy628lzsqW9TE4ZQ/Hso/B+zngWPbhiyscVyXinWCIYBGP4xgl3kOajkNz2c8hOHR63n0+fH35ce5H91898szBxIEylSTiOIlFMpEsHKtZZBIJwjEn496du3O/8u3H92QfKTj2ylhgcZBIgo8IHJdlHMlimUh5H/VxTGSsYLFApLaPHRknNblCkydcOCrISPOR8t/nrWT0uBocW/niet0/C45Nj42c4VETx/mXcsnhUX9y9Fvi5YeH/RxKwjGe8L0X9/j69e4sJofgEByCQ3AIDsEhOATHZhvvzprbIdyq8fXr7QozORSMo9/w6D2W4Oh+Z6n6iXBsd4mXHxuVcZxzKVc9oJDyQNp2oSeMjeI4Jgu61V8051xT8cnR3EfUiTdnZdffSpyVLetjcMoejmUfg/dzwLHswxdXOK5KxDvBEMEiHscxSryH1LvPtT/7OQSHTs+7z4fXD57P/ejFlzeeOZg4UKaSRBwnsUgmkoVjNYtMIkE45mQ8vnlr7lc+/Pmd7CMFx14ZCywOEknwEYHjsowjWSwTKe+jPo6JjBUsFojU9rEj46QmV2jyhAtHBRlpPlL++7yVjB5Xg2MrX1yv+2fBsemxkTM8auI4/1IuOTzqT45+S7z88LCfQ0k4xhO+9+IeX7/encXkEByCQ3AIDsEhOASH4Nhs491ZczuEWzW+fr1dYSaHgnH0Gx69xxIc3e8sVT8Rju0u8fJjozKOcy7lqgcUUh5I2y70hLFRHMdkQbf6i+acayo+OZr7iDrx5qzs+luJs7JlfQxO2cOx7GPwfg44ln344grHVYl4JxgiWMTjOEaJ95B697n2Zz+H4BAcgkNwCA7BITgEh+AQHBIcgkNwCA7BITgEh+AQHIJDgkNwCA716D+oRwSBCqA0cgAAAABJRU5ErkJggg==">
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --paper: #F2F4F8;
+  --card: #FFFFFF;
+  --ink: #1E2A38;
+  --muted: #6C7A8C;
+  --line: #D8DEE7;
+  --steel: #34607F;
+  --sel: #E6EDF3;
+  --skin: #F7DCC4;
+  --skinedge: #9A6F52;
+  --nail: #F7C9BC;
+  --nailedge: #D3A08E;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #151A21; --card: #1D242D; --ink: #E8EDF3; --muted: #93A1B1;
+    --line: #333D49; --steel: #8FBEDC; --sel: #283441;
+  }
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body { margin: 0; background: var(--paper); color: var(--ink);
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent; }
+.wrap { max-width: 560px; margin: 0 auto; padding: 20px 16px 48px; }
+h1 { font-size: 20px; font-weight: 600; letter-spacing: .02em; margin: 0; }
+.sub { font-size: 13px; color: var(--muted); margin: 4px 0 0; }
+
+.banner { margin-top: 14px; border-radius: 10px; padding: 9px 12px; font-size: 12.5px;
+  line-height: 1.5; border: 1px solid var(--line); background: var(--card); color: var(--muted); }
+.banner.warn { border-color: #C9A227; color: #8A6D00; background: #FFF8E2; }
+.banner[hidden] { display: none; }
+
+.datebar { display: flex; align-items: center; gap: 8px; margin-top: 16px; }
+.datebox { flex: 1; position: relative; background: var(--card); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 12px; text-align: center; }
+#datetext { font-size: 15px; font-variant-numeric: tabular-nums; }
+#dateinput { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; border: 0; cursor: pointer; }
+.nav { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--card); color: var(--steel); font-size: 22px; line-height: 1; cursor: pointer; }
+.nav:disabled { color: var(--line); cursor: default; }
+#today { display: none; margin: 8px auto 0; background: none; border: 0; color: var(--steel);
+  font-size: 13px; cursor: pointer; text-decoration: underline; }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px 10px 10px; margin-top: 14px; }
+.handlabels { display: flex; justify-content: space-around; font-size: 12px; color: var(--muted); }
+#hands { width: 100%; display: block; }
+.skin { fill: var(--skin); stroke: var(--skinedge); stroke-width: 2.6; stroke-linejoin: round; }
+.tendon { stroke: var(--skinedge); stroke-width: 1.8; stroke-linecap: round; opacity: .28; }
+.nail { fill: var(--nail); stroke: var(--nailedge); stroke-width: 1.6; }
+.joint { cursor: pointer; }
+.note { text-align: center; font-size: 12px; color: var(--muted); margin: 2px 0 4px; }
+
+.legend { display: flex; gap: 8px; margin-top: 12px; }
+.chip { flex: 1; display: flex; align-items: center; gap: 6px; background: var(--card);
+  border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 12px; }
+.dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid; flex: none; }
+.num { margin-left: auto; font-size: 14px; font-variant-numeric: tabular-nums; }
+
+h2 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 22px 0 6px;
+  display: flex; align-items: baseline; gap: 8px; }
+h2 button { margin-left: auto; background: none; border: 0; color: var(--steel);
+  font: inherit; font-size: 12px; font-weight: 400; cursor: pointer; text-decoration: underline; }
+.wcard { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.wrow { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 3px 0; }
+.wrow span:last-child { font-variant-numeric: tabular-nums; }
+.wnone { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.wfoot { font-size: 11.5px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+.tag { display: inline-block; font-size: 10.5px; border: 1px solid var(--line);
+  border-radius: 4px; padding: 0 4px; margin-left: 6px; vertical-align: 1px; }
+
+label.f { display: block; font-size: 13px; color: var(--muted); margin: 18px 0 6px; }
+textarea, input[type="text"], input[type="search"] { width: 100%; border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 14px;
+  background: var(--card); color: var(--ink); }
+textarea { resize: vertical; }
+textarea:focus, input:focus, .nav:focus-visible, .row:focus-visible { outline: 2px solid var(--steel); outline-offset: 1px; }
+
+.actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.ghost { flex: 1 1 140px; padding: 10px; border: 1px solid var(--line); background: var(--card);
+  border-radius: 10px; font: inherit; font-size: 13px; color: var(--steel); cursor: pointer; }
+
+.place { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.placenow { font-size: 13px; }
+.placecoord { font-size: 11.5px; color: var(--muted); margin-top: 3px; font-variant-numeric: tabular-nums; }
+#results { list-style: none; margin: 8px 0 0; padding: 0; }
+#results li button { width: 100%; text-align: left; background: none; border: 0;
+  border-top: 1px solid var(--line); padding: 9px 2px; font: inherit; font-size: 13px;
+  color: inherit; cursor: pointer; }
+#results li button small { color: var(--muted); }
+
+#history ul { list-style: none; margin: 0; padding: 0; }
+.row { width: 100%; display: flex; align-items: center; gap: 12px; background: none; color: inherit;
+  border: 0; border-bottom: 1px solid var(--line); padding: 10px 4px; font: inherit; cursor: pointer; text-align: left; }
+.row.on { background: var(--sel); }
+.rowdate { font-size: 13px; font-variant-numeric: tabular-nums; }
+.bars { display: flex; gap: 10px; margin-left: auto; font-size: 12px; color: var(--muted); }
+.bar { display: flex; align-items: center; gap: 4px; font-variant-numeric: tabular-nums; }
+.bar i { width: 9px; height: 9px; border-radius: 50%; display: block; }
+.b1 i { background: #F272A8; }
+.b2 i { background: #D6263A; }
+.bw { opacity: .75; }
+
+.modal { position: fixed; inset: 0; background: rgba(15,22,30,.5); display: flex;
+  align-items: center; justify-content: center; padding: 20px; z-index: 20; }
+.modal[hidden] { display: none; }
+.sheet { background: var(--card); border-radius: 14px; padding: 18px; width: 100%; max-width: 520px; }
+.sheet h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.sheetnote { font-size: 12px; color: var(--muted); margin: 6px 0 10px; line-height: 1.5; }
+#sheettext { height: 200px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+
+#toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%); background: #0F1620; color: #fff; font-size: 13px;
+  padding: 9px 16px; border-radius: 999px; z-index: 30; max-width: 90%; text-align: center; }
+#toast[hidden] { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>指関節の痛み記録</h1>
+  <p class="sub">関節をタップして、その日の痛みを残します</p>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <div class="datebar">
+    <button class="nav" id="prev" aria-label="前の日">&lsaquo;</button>
+    <div class="datebox">
+      <div id="datetext"></div>
+      <input type="date" id="dateinput">
+    </div>
+    <button class="nav" id="next" aria-label="次の日">&rsaquo;</button>
+  </div>
+  <button id="today">今日に戻る</button>
+
+  <div class="card">
+    <div class="handlabels"><span>左手</span><span>右手</span></div>
+    <svg id="hands" viewBox="0 0 369 288" role="group" aria-label="両手の関節図"></svg>
+    <p class="note">手の甲を上に向け、上から見た図です</p>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <h2>その日の気象<button id="refetch">取得し直す</button></h2>
+  <div class="wcard" id="weather"></div>
+
+  <label class="f" for="memo">その日の気づき</label>
+  <textarea id="memo" rows="2" placeholder="朝のこわばり、動かしにくさなど"></textarea>
+
+  <h2>記録地域</h2>
+  <div class="place">
+    <div class="placenow" id="placename"></div>
+    <div class="placecoord" id="placecoord"></div>
+    <label class="f" for="q" style="margin-top:12px">地名で変更（旅行・出張のとき）</label>
+    <input type="search" id="q" placeholder="例：札幌、Naha、長野市" autocomplete="off">
+    <ul id="results"></ul>
+  </div>
+
+  <div class="actions">
+    <button class="ghost" id="clear">この日を消す</button>
+    <button class="ghost" id="export">CSVで書き出す</button>
+    <button class="ghost" id="backup">バックアップ</button>
+    <button class="ghost" id="restore">復元</button>
+  </div>
+
+  <div id="history"></div>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="sheet">
+    <h3 id="sheettitle"></h3>
+    <p class="sheetnote" id="sheetnote"></p>
+    <textarea id="sheettext"></textarea>
+    <div class="actions">
+      <button class="ghost" id="sheetok" hidden>取り込む</button>
+      <button class="ghost" id="sheetclose">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" hidden></div>
+
+<script>
+"use strict";
+
+/* ================= 手の図の形状 ================= */
+
+var HAND =
+  "M 55 272 L 53 240 " +
+  "C 52 228, 48 216, 41 202 C 35 190, 30 176, 24 160 C 20 150, 14 140, 6.7 127.9 " +
+  "A 11 11 0 0 1 25.3 116.1 " +
+  "C 33 130, 39 143, 45.5 152 C 49 150, 53.5 149, 55.1 143 " +
+  "L 50.5 40.6 A 9.5 9.5 0 0 1 69.5 39.4 L 75.3 118 C 77 125, 84 125, 85.8 118 " +
+  "L 89.0 24.8 A 10 10 0 0 1 109.0 25.2 L 108.6 120 C 110 127, 117 127, 118.5 120 " +
+  "L 129.8 40.8 A 9.3 9.3 0 0 1 148.2 43.2 L 137.9 137 C 139 144, 145 144, 146.2 137 " +
+  "L 155.9 90.5 A 8.2 8.2 0 0 1 172.1 93.5 L 164.5 139 " +
+  "C 162 150, 156 162, 150 176 C 144 190, 136 204, 131 220 C 130 232, 129.5 248, 130 272 Z";
+
+var TENDONS = [[65.8,148,72,198],[97.0,140,92,198],[127.4,144,112,198],[153.7,157,128,198]];
+
+var FINGERS = [
+  { key:"thumb", label:"親指", r:10,
+    joints:[[66,206],[47,172],[31.6,146.8]],
+    names:["第3関節（CM・親指の付け根）","第2関節（MP）","第1関節（IP）"],
+    nail:{cx:19.2,cy:127.1,w:15.4,h:19,a:-32.1} },
+  { key:"index", label:"人差し指", r:9.5,
+    joints:[[65.8,138],[63.4,97.9],[61.6,67.0]],
+    names:["第3関節（MP）","第2関節（PIP）","第1関節（DIP）"],
+    nail:{cx:60.4,cy:46.0,w:13.4,h:18,a:-3.4} },
+  { key:"middle", label:"中指", r:10,
+    joints:[[97.0,130],[97.8,87.0],[98.5,54.0]],
+    names:["第3関節（MP）","第2関節（PIP）","第1関節（DIP）"],
+    nail:{cx:98.9,cy:31.0,w:14,h:19,a:1.1} },
+  { key:"ring", label:"薬指", r:9.5,
+    joints:[[127.4,134],[132.0,97.6],[135.7,67.8]],
+    names:["第3関節（MP）","第2関節（PIP）","第1関節（DIP）"],
+    nail:{cx:138.2,cy:48.0,w:13,h:17,a:7.2} },
+  { key:"pinky", label:"小指", r:8,
+    joints:[[153.7,147],[157.4,127.4],[160.3,111.7]],
+    names:["第3関節（MP）","第2関節（PIP）","第1関節（DIP）"],
+    nail:{cx:163.1,cy:96.9,w:11.4,h:13,a:10.6} }
+];
+
+var LEVEL_FILL = ["#FFFFFF", "#F272A8", "#D6263A"];
+var LEVEL_STROKE = ["#A9B4C2", "#C2497E", "#8E1523"];
+var LEVEL_NAME = ["記録なし", "やや痛い", "痛みが強い"];
+
+/* ================= 日付 ================= */
+
+var WEEK = ["日","月","火","水","木","金","土"];
+function pad(n){ return String(n).padStart(2,"0"); }
+function toKey(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function fromKey(s){ var p=s.split("-").map(Number); return new Date(p[0],p[1]-1,p[2]); }
+function todayKey(){ return toKey(new Date()); }
+function shiftDay(s,n){ var d=fromKey(s); d.setDate(d.getDate()+n); return toKey(d); }
+function prettyDate(s){ var d=fromKey(s);
+  return d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日（"+WEEK[d.getDay()]+"）"; }
+
+/* ================= 状態 ================= */
+
+var LS = "finger-joint-pain-log-v3";
+var DEFAULT_PLACE = { name: "神奈川県相模原市南区", lat: 35.5313, lon: 139.4276 };
+
+var state = {
+  date: todayKey(),
+  records: {},                       /* "YYYY-MM-DD" -> {joints, memo, weather, place} */
+  settings: { place: DEFAULT_PLACE }
+};
+
+function blank(){ return { joints:{}, memo:"", weather:null, place:null }; }
+function day(){ return state.records[state.date] || blank(); }
+
+function save(){
+  try {
+    localStorage.setItem(LS, JSON.stringify({ records: state.records, settings: state.settings }));
+  } catch (e) {
+    banner("保存できませんでした。ブラウザの保存容量を確認してください。", true);
+  }
+}
+
+function load(){
+  var raw = null;
+  try { raw = localStorage.getItem(LS); } catch (e) {}
+  if (raw) {
+    try {
+      var o = JSON.parse(raw);
+      if (o.records) state.records = o.records;
+      if (o.settings && o.settings.place) state.settings.place = o.settings.place;
+      return;
+    } catch (e) {}
+  }
+  /* 初回は空。過去の記録は「復元」から取り込む */
+  state.records = {};
+}
+
+/* ================= 気象（Open-Meteo） ================= */
+
+var FORECAST = "https://api.open-meteo.com/v1/forecast";
+var ARCHIVE = "https://archive-api.open-meteo.com/v1/archive";
+var HOURLY = "temperature_2m,relative_humidity_2m,pressure_msl";
+var fetching = false;
+
+function placeOf(dkey){
+  var r = state.records[dkey];
+  return (r && r.place) || state.settings.place;
+}
+
+function needsWeather(dkey){
+  var r = state.records[dkey];
+  if (!r) return false;
+  if (!r.weather) return true;
+  /* 当日ぶんは時間が進むと値が変わるので、日付が変わってから取り直す */
+  if (r.weather.provisional && dkey < todayKey()) return true;
+  return false;
+}
+
+async function fetchRange(place, start, end, recent){
+  var url = (recent ? FORECAST : ARCHIVE) +
+    "?latitude=" + place.lat + "&longitude=" + place.lon +
+    "&hourly=" + HOURLY +
+    "&start_date=" + start + "&end_date=" + end +
+    "&timezone=Asia%2FTokyo";
+  var res = await fetch(url);
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  var j = await res.json();
+  if (!j.hourly || !j.hourly.time) throw new Error("形式が想定と違います");
+  return j.hourly;
+}
+
+function digest(hourly){
+  var byDate = {};
+  hourly.time.forEach(function(t, i){
+    var d = t.slice(0, 10);
+    var b = byDate[d] || (byDate[d] = { t:[], h:[], p:[] });
+    var tv = hourly.temperature_2m ? hourly.temperature_2m[i] : null;
+    var hv = hourly.relative_humidity_2m ? hourly.relative_humidity_2m[i] : null;
+    var pv = hourly.pressure_msl ? hourly.pressure_msl[i] : null;
+    if (tv !== null && tv !== undefined) b.t.push(tv);
+    if (hv !== null && hv !== undefined) b.h.push(hv);
+    if (pv !== null && pv !== undefined) b.p.push(pv);
+  });
+  var out = {};
+  Object.keys(byDate).forEach(function(d){
+    var b = byDate[d];
+    if (!b.t.length) return;
+    var mean = function(a){ return a.reduce(function(x,y){ return x+y; }, 0) / a.length; };
+    out[d] = {
+      tmax: Math.round(Math.max.apply(null, b.t) * 10) / 10,
+      tmin: Math.round(Math.min.apply(null, b.t) * 10) / 10,
+      tavg: Math.round(mean(b.t) * 10) / 10,
+      humidity: b.h.length ? Math.round(mean(b.h)) : null,
+      pressure: b.p.length ? Math.round(mean(b.p) * 10) / 10 : null,
+      hours: b.t.length
+    };
+  });
+  return out;
+}
+
+async function syncWeather(force){
+  if (fetching) return;
+  var targets = Object.keys(state.records).filter(function(d){
+    return force ? !!state.records[d] : needsWeather(d);
+  }).sort();
+  if (!targets.length) return;
+
+  fetching = true;
+  banner("気象データを取得しています…");
+  var filled = 0, failed = 0;
+  var limit = shiftDay(todayKey(), -88);   /* 直近はforecast、それ以前はarchive */
+
+  /* 地点 × 期間種別でまとめて1回ずつ問い合わせる */
+  var groups = {};
+  targets.forEach(function(d){
+    var p = placeOf(d);
+    var recent = d >= limit;
+    var k = p.lat + "," + p.lon + "," + (recent ? "R" : "A");
+    var g = groups[k] || (groups[k] = { place:p, recent:recent, dates:[] });
+    g.dates.push(d);
+  });
+
+  for (var k in groups) {
+    var g = groups[k];
+    try {
+      var hourly = await fetchRange(g.place, g.dates[0], g.dates[g.dates.length-1], g.recent);
+      var byDate = digest(hourly);
+      g.dates.forEach(function(d){
+        var w = byDate[d];
+        if (!w) return;
+        var rec = state.records[d];
+        rec.weather = {
+          tmax: w.tmax, tmin: w.tmin, tavg: w.tavg,
+          humidity: w.humidity, pressure: w.pressure,
+          hours: w.hours,
+          provisional: w.hours < 24,
+          place: { name: g.place.name, lat: g.place.lat, lon: g.place.lon },
+          source: "Open-Meteo",
+          fetchedAt: new Date().toISOString()
+        };
+        if (!rec.place) rec.place = { name:g.place.name, lat:g.place.lat, lon:g.place.lon };
+        filled++;
+      });
+    } catch (e) {
+      failed++;
+      console.error(e);
+    }
+  }
+
+  fetching = false;
+  save();
+  render();
+  if (failed && !filled) {
+    banner("気象データを取得できませんでした。通信状況を確認して、「取得し直す」を押してください。", true);
+  } else if (failed) {
+    banner(filled + "日ぶん取得しました。一部は取得できませんでした。", true);
+    setTimeout(function(){ banner(""); }, 6000);
+  } else {
+    banner("");
+    if (filled) toast(filled + "日ぶんの気象データを記録しました");
+  }
+}
+
+/* ================= 地名検索 ================= */
+
+var searchTimer = null;
+async function searchPlace(q){
+  var ul = document.getElementById("results");
+  if (!q || q.length < 2) { ul.innerHTML = ""; return; }
+  try {
+    var res = await fetch("https://geocoding-api.open-meteo.com/v1/search?name=" +
+      encodeURIComponent(q) + "&count=6&language=ja&format=json");
+    var j = await res.json();
+    var list = j.results || [];
+    if (!list.length) { ul.innerHTML = '<li><button disabled>見つかりませんでした</button></li>'; return; }
+    ul.innerHTML = list.map(function(r, i){
+      var sub = [r.admin1, r.country].filter(Boolean).join(" / ");
+      return '<li><button data-i="' + i + '">' + esc(r.name) +
+             ' <small>' + esc(sub) + '</small></button></li>';
+    }).join("");
+    ul._list = list;
+  } catch (e) {
+    ul.innerHTML = '<li><button disabled>検索できませんでした</button></li>';
+  }
+}
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){
+  return ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" })[c]; }); }
+
+/* ================= 描画 ================= */
+
+function handGroup(hand, joints){
+  var s = '<path d="' + HAND + '" class="skin"/>';
+  TENDONS.forEach(function(t){
+    s += '<line class="tendon" x1="'+t[0]+'" y1="'+t[1]+'" x2="'+t[2]+'" y2="'+t[3]+'"/>';
+  });
+  FINGERS.forEach(function(f){
+    var n = f.nail;
+    s += '<rect class="nail" x="'+(n.cx-n.w/2)+'" y="'+(n.cy-n.h/2)+'" width="'+n.w+'" height="'+n.h+
+         '" rx="'+(n.w*0.32)+'" transform="rotate('+n.a+' '+n.cx+' '+n.cy+')"/>';
+  });
+  FINGERS.forEach(function(f){
+    f.joints.forEach(function(p, i){
+      var id = hand + "-" + f.key + "-" + i;
+      var lv = joints[id] || 0;
+      s += '<g class="joint" data-id="'+id+'">' +
+           '<title>'+(hand==="L"?"左":"右")+f.label+" "+f.names[i]+"："+LEVEL_NAME[lv]+'</title>' +
+           '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="16" fill="transparent"/>' +
+           '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+f.r+'" fill="'+LEVEL_FILL[lv]+
+           '" stroke="'+LEVEL_STROKE[lv]+'" stroke-width="'+(lv===0?1.6:2.2)+'"/></g>';
+    });
+  });
+  return s;
+}
+
+function renderHands(){
+  var j = day().joints;
+  document.getElementById("hands").innerHTML =
+    '<g transform="translate(177,0) scale(-1,1)">' + handGroup("L", j) + '</g>' +
+    '<g transform="translate(192,0)">' + handGroup("R", j) + '</g>';
+}
+
+function countLevels(joints){
+  var c = [0,0,0];
+  Object.keys(joints || {}).forEach(function(k){ c[joints[k]] += 1; });
+  return c;
+}
+
+function renderLegend(){
+  var c = countLevels(day().joints);
+  document.getElementById("legend").innerHTML = LEVEL_NAME.map(function(n, i){
+    return '<div class="chip"><span class="dot" style="background:'+LEVEL_FILL[i]+
+      ';border-color:'+LEVEL_STROKE[i]+'"></span><span>'+n+'</span>' +
+      (i > 0 ? '<b class="num">'+c[i]+'</b>' : '') + '</div>';
+  }).join("");
+}
+
+function renderWeather(){
+  var r = state.records[state.date];
+  var w = r && r.weather;
+  var el = document.getElementById("weather");
+  if (!w) {
+    el.innerHTML = '<div class="wnone">' +
+      (r ? '気象データは起動時に自動取得します。取得できていない場合は「取得し直す」を押してください。'
+         : 'この日はまだ記録がありません。関節をタップすると、その日の気象データも自動で取得します。') +
+      '</div>';
+    return;
+  }
+  var t = [];
+  if (w.tmax != null) t.push("最高 " + w.tmax + "℃");
+  if (w.tmin != null) t.push("最低 " + w.tmin + "℃");
+  if (w.tavg != null) t.push("平均 " + w.tavg + "℃");
+  var s = '<div class="wrow"><span>気温</span><span>' + t.join(" / ") + '</span></div>';
+  if (w.humidity != null) s += '<div class="wrow"><span>湿度（平均）</span><span>' + w.humidity + '%</span></div>';
+  if (w.pressure != null) s += '<div class="wrow"><span>気圧（海面・平均）</span><span>' + w.pressure + ' hPa</span></div>';
+  s += '<div class="wfoot">地点：' + esc(w.place ? w.place.name : "") +
+       '（' + (w.place ? w.place.lat + ", " + w.place.lon : "") + '）／ 出典：' + esc(w.source || "") +
+       (w.provisional ? '<span class="tag">暫定・' + w.hours + '時間ぶん</span>' : '') + '</div>';
+  el.innerHTML = s;
+}
+
+function renderPlace(){
+  var p = state.settings.place;
+  document.getElementById("placename").textContent = p.name;
+  document.getElementById("placecoord").textContent = "緯度 " + p.lat + " / 経度 " + p.lon;
+}
+
+function renderHistory(){
+  var keys = Object.keys(state.records).filter(function(k){
+    var r = state.records[k];
+    return Object.keys(r.joints || {}).length > 0 || r.memo;
+  }).sort().reverse().slice(0, 60);
+  var el = document.getElementById("history");
+  if (!keys.length) { el.innerHTML = ""; return; }
+  var s = '<h2>これまでの記録</h2><ul>';
+  keys.forEach(function(k){
+    var r = state.records[k];
+    var c = countLevels(r.joints);
+    var bars = "";
+    if (c[1]) bars += '<span class="bar b1"><i></i>'+c[1]+'</span>';
+    if (c[2]) bars += '<span class="bar b2"><i></i>'+c[2]+'</span>';
+    if (!c[1] && !c[2]) bars += '<span class="bar">痛みなし</span>';
+    if (r.weather && r.weather.tavg != null) bars += '<span class="bar bw">'+r.weather.tavg+'℃</span>';
+    if (r.weather && r.weather.pressure != null) bars += '<span class="bar bw">'+Math.round(r.weather.pressure)+'hPa</span>';
+    s += '<li><button class="row'+(k===state.date?" on":"")+'" data-date="'+k+'">' +
+         '<span class="rowdate">'+k.replace(/-/g,"/")+'</span>' +
+         '<span class="bars">'+bars+'</span></button></li>';
+  });
+  el.innerHTML = s + "</ul>";
+}
+
+function renderDate(){
+  document.getElementById("datetext").textContent = prettyDate(state.date);
+  document.getElementById("dateinput").value = state.date;
+  document.getElementById("next").disabled = state.date >= todayKey();
+  document.getElementById("today").style.display = state.date === todayKey() ? "none" : "block";
+}
+
+function render(){
+  renderDate(); renderHands(); renderLegend(); renderWeather(); renderPlace(); renderHistory();
+  var memo = document.getElementById("memo");
+  if (document.activeElement !== memo) memo.value = day().memo || "";
+}
+
+function banner(text, warn){
+  var el = document.getElementById("banner");
+  if (!text) { el.hidden = true; return; }
+  el.hidden = false;
+  el.className = "banner" + (warn ? " warn" : "");
+  el.textContent = text;
+}
+
+var toastTimer = null;
+function toast(msg){
+  var el = document.getElementById("toast");
+  el.textContent = msg; el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.hidden = true; }, 2200);
+}
+
+/* ================= 操作 ================= */
+
+function setDate(d){
+  if (!d) return;
+  if (d > todayKey()) d = todayKey();
+  state.date = d;
+  render();
+}
+
+function tap(id){
+  var fresh = !state.records[state.date];
+  var rec = state.records[state.date];
+  if (!rec) {
+    rec = blank();
+    rec.place = { name: state.settings.place.name, lat: state.settings.place.lat, lon: state.settings.place.lon };
+    state.records[state.date] = rec;
+  }
+  var cur = rec.joints[id] || 0;
+  var lv = (cur + 1) % 3;
+  if (lv === 0) delete rec.joints[id]; else rec.joints[id] = lv;
+  save();
+  renderHands(); renderLegend(); renderHistory(); renderWeather();
+  if (fresh) syncWeather(false);
+}
+
+document.getElementById("hands").addEventListener("click", function(e){
+  var g = e.target.closest ? e.target.closest(".joint") : null;
+  if (g && g.dataset.id) tap(g.dataset.id);
+});
+document.getElementById("prev").addEventListener("click", function(){ setDate(shiftDay(state.date,-1)); });
+document.getElementById("next").addEventListener("click", function(){ setDate(shiftDay(state.date,1)); });
+document.getElementById("today").addEventListener("click", function(){ setDate(todayKey()); });
+document.getElementById("dateinput").addEventListener("change", function(e){ setDate(e.target.value); });
+document.getElementById("history").addEventListener("click", function(e){
+  var b = e.target.closest ? e.target.closest(".row") : null;
+  if (b && b.dataset.date) setDate(b.dataset.date);
+});
+
+var memoTimer = null;
+document.getElementById("memo").addEventListener("input", function(e){
+  var v = e.target.value;
+  var rec = state.records[state.date];
+  if (!rec) {
+    rec = blank();
+    rec.place = { name: state.settings.place.name, lat: state.settings.place.lat, lon: state.settings.place.lon };
+    state.records[state.date] = rec;
+  }
+  rec.memo = v;
+  clearTimeout(memoTimer);
+  memoTimer = setTimeout(save, 500);
+});
+
+document.getElementById("refetch").addEventListener("click", function(){
+  var rec = state.records[state.date];
+  if (!rec) { toast("この日はまだ記録がありません"); return; }
+  rec.weather = null;
+  syncWeather(false);
+});
+
+document.getElementById("q").addEventListener("input", function(e){
+  var v = e.target.value;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function(){ searchPlace(v); }, 400);
+});
+document.getElementById("results").addEventListener("click", function(e){
+  var b = e.target.closest ? e.target.closest("button[data-i]") : null;
+  if (!b) return;
+  var list = document.getElementById("results")._list || [];
+  var r = list[Number(b.dataset.i)];
+  if (!r) return;
+  state.settings.place = {
+    name: [r.name, r.admin1].filter(Boolean).join("・"),
+    lat: Math.round(r.latitude * 10000) / 10000,
+    lon: Math.round(r.longitude * 10000) / 10000
+  };
+  save();
+  document.getElementById("q").value = "";
+  document.getElementById("results").innerHTML = "";
+  renderPlace();
+  toast("記録地域を " + state.settings.place.name + " にしました");
+});
+
+document.getElementById("clear").addEventListener("click", function(){
+  delete state.records[state.date];
+  save(); render();
+  toast("この日の記録を消しました");
+});
+
+/* --- 書き出し・バックアップ --- */
+
+function openSheet(title, note, text, importable){
+  document.getElementById("sheettitle").textContent = title;
+  document.getElementById("sheetnote").textContent = note;
+  var ta = document.getElementById("sheettext");
+  ta.value = text; ta.readOnly = !importable;
+  document.getElementById("sheetok").hidden = !importable;
+  document.getElementById("modal").hidden = false;
+  if (!importable) { ta.focus(); ta.select(); }
+}
+document.getElementById("sheetclose").addEventListener("click", function(){
+  document.getElementById("modal").hidden = true;
+});
+
+document.getElementById("export").addEventListener("click", function(){
+  var rows = [["日付","手","指","関節","痛みレベル","状態","気温最高","気温最低","気温平均",
+               "湿度平均","海面気圧平均","地点","緯度","経度","暫定","メモ"]];
+  Object.keys(state.records).sort().forEach(function(d){
+    var r = state.records[d];
+    var w = r.weather || {};
+    var pl = w.place || r.place || {};
+    var wv = [w.tmax != null ? w.tmax : "", w.tmin != null ? w.tmin : "", w.tavg != null ? w.tavg : "",
+              w.humidity != null ? w.humidity : "", w.pressure != null ? w.pressure : "",
+              pl.name || "", pl.lat != null ? pl.lat : "", pl.lon != null ? pl.lon : "",
+              w.provisional ? "暫定" : ""];
+    var ids = Object.keys(r.joints || {}).sort();
+    if (!ids.length) { rows.push([d,"","","","",""].concat(wv, [r.memo || ""])); return; }
+    ids.forEach(function(id){
+      var p = id.split("-");
+      var f = FINGERS.filter(function(x){ return x.key === p[1]; })[0];
+      rows.push([d, p[0]==="L"?"左":"右", f.label, f.names[Number(p[2])],
+                 r.joints[id], LEVEL_NAME[r.joints[id]]].concat(wv, [r.memo || ""]));
+    });
+  });
+  openSheet("CSVデータ", "全文を選択してコピーし、Excelに貼り付けてください。",
+    rows.map(function(r){
+      return r.map(function(c){ return '"' + String(c).replace(/"/g,'""') + '"'; }).join(",");
+    }).join("\n"), false);
+});
+
+document.getElementById("backup").addEventListener("click", function(){
+  openSheet("バックアップ",
+    "この文字列をコピーして、メモアプリなどに保管してください。別の端末の「復元」に貼り付けると、そのまま移せます。",
+    JSON.stringify({ records: state.records, settings: state.settings }), false);
+});
+
+document.getElementById("restore").addEventListener("click", function(){
+  openSheet("復元", "バックアップの文字列を貼り付けて「取り込む」を押してください。同じ日付の記録は上書きされます。", "", true);
+});
+
+document.getElementById("sheetok").addEventListener("click", function(){
+  var txt = document.getElementById("sheettext").value.trim();
+  if (!txt) { toast("何も貼り付けられていません"); return; }
+  var o;
+  try { o = JSON.parse(txt); } catch (e) { toast("形式が正しくありません"); return; }
+  if (!o || !o.records) { toast("形式が正しくありません"); return; }
+  var n = 0;
+  Object.keys(o.records).forEach(function(d){
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
+    var r = o.records[d];
+    state.records[d] = { joints: r.joints || {}, memo: r.memo || "",
+                         weather: r.weather || null, place: r.place || null };
+    n++;
+  });
+  if (o.settings && o.settings.place) state.settings.place = o.settings.place;
+  save(); render();
+  document.getElementById("modal").hidden = true;
+  toast(n + "日ぶんを取り込みました");
+  syncWeather(false);
+});
+
+/* ================= 起動 ================= */
+
+load();
+render();
+syncWeather(false);
+
+/* ホーム画面から呼び戻したときも取得し直す */
+document.addEventListener("visibilitychange", function(){
+  if (document.visibilityState === "visible") {
+    if (state.date !== todayKey() && state.date === toKey(new Date(Date.now() - 86400000))) {
+      /* 日付をまたいだ場合は今日に移す */
+      state.date = todayKey();
+    }
+    render();
+    syncWeather(false);
+  }
+});
+</script>
+</body>
+</html>
