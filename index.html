@@ -104,7 +104,15 @@ textarea:focus, input:focus, .nav:focus-visible, .row:focus-visible { outline: 2
 #results li button { width: 100%; text-align: left; background: none; border: 0;
   border-top: 1px solid var(--line); padding: 9px 2px; font: inherit; font-size: 13px;
   color: inherit; cursor: pointer; }
-#results li button small { color: var(--muted); }
+#results li button small, #iresults li button small { color: var(--muted); }
+#iresults { list-style: none; margin: 8px 0 0; padding: 0; }
+#iresults li button { width: 100%; text-align: left; background: none; border: 0;
+  border-top: 1px solid var(--line); padding: 9px 2px; font: inherit; font-size: 13px;
+  color: inherit; cursor: pointer; }
+.sheet { max-height: 82vh; overflow-y: auto; }
+.introlist { margin: 12px 0 0; padding-left: 1.15em; font-size: 12.5px; line-height: 1.75; }
+.introlist li { margin-bottom: 7px; }
+.introq { font-size: 13px; margin: 18px 0 8px; line-height: 1.6; }
 
 #history ul { list-style: none; margin: 0; padding: 0; }
 .row { width: 100%; display: flex; align-items: center; gap: 12px; background: none; color: inherit;
@@ -182,6 +190,25 @@ textarea:focus, input:focus, .nav:focus-visible, .row:focus-visible { outline: 2
   <div id="history"></div>
 </div>
 
+<div class="modal" id="intro" hidden>
+  <div class="sheet">
+    <h3>はじめに</h3>
+    <ul class="introlist">
+      <li>記録は<b>この端末のこのブラウザの中だけ</b>に保存されます。どこにも送信されず、他の人からは見えません。</li>
+      <li>そのため<b>端末をまたいで共有されません</b>。パソコンとスマホは別々の記録になります。移すときは「バックアップ」と「復元」を使います。</li>
+      <li>ブラウザの履歴やサイトデータを消すと<b>記録も消えます</b>。ときどき「バックアップ」を押して、出てきた文字列を保管しておいてください。</li>
+      <li>このアプリは記録するだけで、診断や判断はしません。痛みが続くときは整形外科かリウマチ科で相談してください。</li>
+    </ul>
+    <p class="introq">記録した日の気温・湿度・気圧を自動で取得します。お住まいの地域を選んでください。</p>
+    <input type="search" id="iq" placeholder="市区町村名で検索（例：相模原、盛岡、Naha）" autocomplete="off">
+    <ul id="iresults"></ul>
+    <div class="actions">
+      <button class="ghost" id="igeo">現在地から設定</button>
+      <button class="ghost" id="iskip">あとで設定する</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="modal" hidden>
   <div class="sheet">
     <h3 id="sheettitle"></h3>
@@ -255,15 +282,19 @@ function prettyDate(s){ var d=fromKey(s);
 /* ================= 状態 ================= */
 
 var LS = "finger-joint-pain-log-v3";
-var DEFAULT_PLACE = { name: "神奈川県相模原市南区", lat: 35.5313, lon: 139.4276 };
+var DEFAULT_PLACE = null;   /* 初回起動時に尋ねる */
 
 var state = {
   date: todayKey(),
   records: {},                       /* "YYYY-MM-DD" -> {joints, memo, weather, place} */
-  settings: { place: DEFAULT_PLACE }
+  settings: { place: DEFAULT_PLACE, onboarded: false }
 };
 
 function blank(){ return { joints:{}, memo:"", weather:null, place:null }; }
+function currentPlace(){
+  var p = state.settings.place;
+  return p ? { name:p.name, lat:p.lat, lon:p.lon } : null;
+}
 function day(){ return state.records[state.date] || blank(); }
 
 function save(){
@@ -281,7 +312,10 @@ function load(){
     try {
       var o = JSON.parse(raw);
       if (o.records) state.records = o.records;
-      if (o.settings && o.settings.place) state.settings.place = o.settings.place;
+      if (o.settings) {
+        if (o.settings.place) state.settings.place = o.settings.place;
+        state.settings.onboarded = !!o.settings.onboarded;
+      }
       return;
     } catch (e) {}
   }
@@ -355,6 +389,7 @@ function digest(hourly){
 async function syncWeather(force){
   if (fetching) return;
   var targets = Object.keys(state.records).filter(function(d){
+    if (!placeOf(d)) return false;              /* 地点未設定の日は取りに行かない */
     return force ? !!state.records[d] : needsWeather(d);
   }).sort();
   if (!targets.length) return;
@@ -418,8 +453,8 @@ async function syncWeather(force){
 /* ================= 地名検索 ================= */
 
 var searchTimer = null;
-async function searchPlace(q){
-  var ul = document.getElementById("results");
+async function searchPlace(q, ulId){
+  var ul = document.getElementById(ulId);
   if (!q || q.length < 2) { ul.innerHTML = ""; return; }
   try {
     var res = await fetch("https://geocoding-api.open-meteo.com/v1/search?name=" +
@@ -494,7 +529,9 @@ function renderWeather(){
   var el = document.getElementById("weather");
   if (!w) {
     el.innerHTML = '<div class="wnone">' +
-      (r ? '気象データは起動時に自動取得します。取得できていない場合は「取得し直す」を押してください。'
+      (!state.settings.place && !(r && r.place)
+         ? '記録地域が未設定です。下の「記録地域」で地域を選ぶと、この日ぶんから自動で取得します。'
+       : r ? '気象データは起動時に自動取得します。取得できていない場合は「取得し直す」を押してください。'
          : 'この日はまだ記録がありません。関節をタップすると、その日の気象データも自動で取得します。') +
       '</div>';
     return;
@@ -514,8 +551,19 @@ function renderWeather(){
 
 function renderPlace(){
   var p = state.settings.place;
-  document.getElementById("placename").textContent = p.name;
-  document.getElementById("placecoord").textContent = "緯度 " + p.lat + " / 経度 " + p.lon;
+  document.getElementById("placename").textContent = p ? p.name : "未設定";
+  document.getElementById("placecoord").textContent =
+    p ? ("緯度 " + p.lat + " / 経度 " + p.lon)
+      : "下の検索欄で地域を選ぶと、気象データの取得が始まります。";
+}
+
+function setPlace(p){
+  state.settings.place = p;
+  state.settings.onboarded = true;
+  save();
+  renderPlace();
+  toast("記録地域を " + p.name + " にしました");
+  syncWeather(false);
 }
 
 function renderHistory(){
@@ -585,7 +633,7 @@ function tap(id){
   var rec = state.records[state.date];
   if (!rec) {
     rec = blank();
-    rec.place = { name: state.settings.place.name, lat: state.settings.place.lat, lon: state.settings.place.lon };
+    rec.place = currentPlace();
     state.records[state.date] = rec;
   }
   var cur = rec.joints[id] || 0;
@@ -615,7 +663,7 @@ document.getElementById("memo").addEventListener("input", function(e){
   var rec = state.records[state.date];
   if (!rec) {
     rec = blank();
-    rec.place = { name: state.settings.place.name, lat: state.settings.place.lat, lon: state.settings.place.lon };
+    rec.place = currentPlace();
     state.records[state.date] = rec;
   }
   rec.memo = v;
@@ -630,27 +678,51 @@ document.getElementById("refetch").addEventListener("click", function(){
   syncWeather(false);
 });
 
-document.getElementById("q").addEventListener("input", function(e){
-  var v = e.target.value;
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(function(){ searchPlace(v); }, 400);
-});
-document.getElementById("results").addEventListener("click", function(e){
-  var b = e.target.closest ? e.target.closest("button[data-i]") : null;
-  if (!b) return;
-  var list = document.getElementById("results")._list || [];
-  var r = list[Number(b.dataset.i)];
-  if (!r) return;
-  state.settings.place = {
-    name: [r.name, r.admin1].filter(Boolean).join("・"),
-    lat: Math.round(r.latitude * 10000) / 10000,
-    lon: Math.round(r.longitude * 10000) / 10000
-  };
+function wireSearch(inputId, ulId, after){
+  document.getElementById(inputId).addEventListener("input", function(e){
+    var v = e.target.value;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function(){ searchPlace(v, ulId); }, 400);
+  });
+  document.getElementById(ulId).addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("button[data-i]") : null;
+    if (!b) return;
+    var list = document.getElementById(ulId)._list || [];
+    var r = list[Number(b.dataset.i)];
+    if (!r) return;
+    setPlace({
+      name: [r.name, r.admin1].filter(Boolean).join("・"),
+      lat: Math.round(r.latitude * 10000) / 10000,
+      lon: Math.round(r.longitude * 10000) / 10000
+    });
+    document.getElementById(inputId).value = "";
+    document.getElementById(ulId).innerHTML = "";
+    if (after) after();
+  });
+}
+wireSearch("q", "results", null);
+wireSearch("iq", "iresults", closeIntro);
+
+function closeIntro(){
+  state.settings.onboarded = true;
   save();
-  document.getElementById("q").value = "";
-  document.getElementById("results").innerHTML = "";
-  renderPlace();
-  toast("記録地域を " + state.settings.place.name + " にしました");
+  document.getElementById("intro").hidden = true;
+  render();
+}
+document.getElementById("iskip").addEventListener("click", closeIntro);
+document.getElementById("igeo").addEventListener("click", function(){
+  if (!navigator.geolocation) { toast("この端末では現在地を取得できません"); return; }
+  toast("現在地を取得しています…");
+  navigator.geolocation.getCurrentPosition(function(pos){
+    setPlace({
+      name: "現在地",
+      lat: Math.round(pos.coords.latitude * 10000) / 10000,
+      lon: Math.round(pos.coords.longitude * 10000) / 10000
+    });
+    closeIntro();
+  }, function(){
+    toast("現在地を取得できませんでした。地名で検索してください");
+  }, { timeout: 10000 });
 });
 
 document.getElementById("clear").addEventListener("click", function(){
@@ -735,7 +807,11 @@ document.getElementById("sheetok").addEventListener("click", function(){
 
 load();
 render();
-syncWeather(false);
+if (!state.settings.onboarded) {
+  document.getElementById("intro").hidden = false;
+} else {
+  syncWeather(false);
+}
 
 /* ホーム画面から呼び戻したときも取得し直す */
 document.addEventListener("visibilitychange", function(){
